@@ -1,0 +1,5 @@
+# build dir
+builddir/**
+
+# imgui log
+imgui.ini

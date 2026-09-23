@@ -1,0 +1,121 @@
+
+#        ________                       ______                          __
+#       / ____/ /___ _____  ____ _     / ____/___  _________ ___  ____ _/ /_
+#      / /   / / __ `/ __ \/ __ `/    / /_  / __ \/ ___/ __ `__ \/ __ `/ __/
+#     / /___/ / /_/ / / / / /_/ /    / __/ / /_/ / /  / / / / / / /_/ / /_
+#     \____/_/\__,_/_/ /_/\__, /    /_/    \____/_/  /_/ /_/ /_/\__,_/\__/
+#                        /____/
+#
+
+Language: Cpp
+ColumnLimit: 120
+
+UseTab: Never
+TabWidth: 4
+IndentWidth: 4
+ContinuationIndentWidth: 4
+
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+
+AlignTrailingComments: true
+AlwaysBreakBeforeMultilineStrings: true
+
+FixNamespaceComments: true
+NamespaceIndentation: All
+
+InsertNewlineAtEOF: true
+
+# ==============================
+#         Break Style
+# ==============================
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+BreakAfterOpenBracketFunction: false
+
+# ==============================
+#   Constructor Initialization 
+# ==============================
+#
+#   Constructor()
+#       : initializer1()
+#       , initializer2()
+#       , initializer3()
+#
+BreakConstructorInitializers: BeforeComma
+ConstructorInitializerIndentWidth: 4
+PackConstructorInitializers: Never
+
+# ==============================
+#      Function Parameters
+# ==============================
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
+
+# ==============================
+#    Braced Initializer Style
+# ==============================
+AlignAfterOpenBracket: AlwaysBreak
+BracedInitializerIndentWidth: 2
+AlignArrayOfStructures: None
+Cpp11BracedListStyle: true
+
+# ==============================
+#     Access Modifier Style
+# ==============================
+#
+#   class Foo
+#   {
+#   public:
+#       void bar();
+#   private:
+#       int mData;
+#   };
+#
+AccessModifierOffset: -4
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: Never
+
+# ==============================
+#         Pointer Style
+# ==============================
+#
+#   int* a;
+#   int& b;
+#
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Pointer
+
+# ==============================
+#         Operand Style
+# ==============================
+AlignOperands: Align
+BreakBeforeBinaryOperators: None
+
+# ==============================
+#      Include Sort Order
+# ==============================
+SortIncludes:
+  Enabled: false
