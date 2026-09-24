@@ -2,15 +2,15 @@
 
 #include "app_design.hpp"
 
-class MyApp : public App
+class MyApp : public App<MyApp>
 {
 public:
     MyApp()  = default;
     ~MyApp() = default;
 
-    virtual void StartUp() final {}
+    void StartUp() {}
 
-    virtual void Update() final
+    void Update()
     {
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You
         // can browse its code to learn more about Dear ImGui!).

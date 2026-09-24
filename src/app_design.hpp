@@ -15,13 +15,16 @@ static void glfw_error_callback(int code, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", code, description);
 }
 
+template <typename Derived>
 class App
 {
 public:
     App()
     {
+        // Setup
         glfwSetErrorCallback(glfw_error_callback);
-        if (!glfwInit()) std::exit(1);
+        if (!glfwInit())
+            std::exit(1);
 
         const char* glsl_version = nullptr;
 #if defined(__APPLE__)
@@ -40,12 +43,14 @@ public:
 
         // Create window with graphics context
         float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor()); // Valid on GLFW 3.3+ only
-        window = glfwCreateWindow((int)(1280 * main_scale), (int)(800 * main_scale), "imgui sample", nullptr, nullptr);
+        window = glfwCreateWindow((int)(1280 * main_scale), (int)(800 * main_scale), "Dear ImGui", nullptr, nullptr);
         glfwMakeContextCurrent(window);
-        if (window == nullptr) std::exit(1);
+        if (window == nullptr)
+            std::exit(1);
 
         int version = gladLoadGL(glfwGetProcAddress);
-        if (version == 0) std::exit(1);
+        if (version == 0)
+            std::exit(1);
 
         glfwSwapInterval(1); // Enable vsync
 
@@ -72,9 +77,6 @@ public:
 
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);
-#ifdef __EMSCRIPTEN__
-        ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
-#endif
         ImGui_ImplOpenGL3_Init(glsl_version);
 
         // Load Fonts
@@ -106,7 +108,7 @@ public:
         // IM_ASSERT(font != nullptr);
     }
 
-    virtual ~App()
+    ~App()
     {
         // Cleanup
         ImGui_ImplOpenGL3_Shutdown();
@@ -162,8 +164,15 @@ public:
         }
     }
 
-    virtual void Update()  = 0;
-    virtual void StartUp() = 0;
+    void Update()
+    {
+        static_cast<Derived*>(this)->Update();
+    }
+
+    void StartUp()
+    {
+        static_cast<Derived*>(this)->StartUp();
+    }
 protected:
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 private:
