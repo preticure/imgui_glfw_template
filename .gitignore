@@ -1,5 +1,8 @@
 # build dir
-builddir/**
+builddir
 
 # imgui log
 imgui.ini
+
+# apple
+.DS_Store

@@ -15,42 +15,33 @@ static void glfw_error_callback(int code, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", code, description);
 }
 
-template <typename Derived>
-class App
+template <typename Derived> class App
 {
 public:
     App()
     {
-        // Setup
+        // -------------------- Setup --------------------
         glfwSetErrorCallback(glfw_error_callback);
-        if (!glfwInit())
-            std::exit(1);
+        if (!glfwInit()) std::exit(1);
 
         const char* glsl_version = nullptr;
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #if defined(__APPLE__)
-        // GL 3.2 + generally GLSL 150
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // Required on Mac
-#else
-        // GL 3.0 + generally GLSL 130
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-        // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+
-        // only glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Required on Mac
 #endif
 
         // Create window with graphics context
         float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor()); // Valid on GLFW 3.3+ only
         window = glfwCreateWindow((int)(1280 * main_scale), (int)(800 * main_scale), "Dear ImGui", nullptr, nullptr);
         glfwMakeContextCurrent(window);
-        if (window == nullptr)
-            std::exit(1);
+        if (window == nullptr) std::exit(1);
 
         int version = gladLoadGL(glfwGetProcAddress);
-        if (version == 0)
-            std::exit(1);
+        if (version == 0) std::exit(1);
+
+        fprintf(stdout, "loaded GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 
         glfwSwapInterval(1); // Enable vsync
 
@@ -60,7 +51,6 @@ public:
         ImGuiIO& io = ImGui::GetIO();
         (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
@@ -106,10 +96,14 @@ public:
         // ImFont* font =
         // io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf");
         // IM_ASSERT(font != nullptr);
+
+        fprintf(stdout, "Application is launched.\n");
     }
 
     ~App()
     {
+        fprintf(stdout, "Application is terminated.\n");
+
         // Cleanup
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
@@ -141,22 +135,20 @@ public:
                 continue;
             }
 
-            // Start the Dear ImGui frame
+            // ----------------- Start ImGui frame -----------------
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
             Update();
 
-            // Rendering
+            // -------------------- Rendering --------------------
             ImGui::Render();
+
             int display_w, display_h;
             glfwGetFramebufferSize(window, &display_w, &display_h);
             glViewport(0, 0, display_w, display_h);
-            glClearColor(clear_color.x * clear_color.w,
-                         clear_color.y * clear_color.w,
-                         clear_color.z * clear_color.w,
-                         clear_color.w);
+            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
             glClear(GL_COLOR_BUFFER_BIT);
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -164,17 +156,12 @@ public:
         }
     }
 
-    void Update()
-    {
-        static_cast<Derived*>(this)->Update();
-    }
+    void Update() { static_cast<Derived*>(this)->Update(); }
 
-    void StartUp()
-    {
-        static_cast<Derived*>(this)->StartUp();
-    }
+    void StartUp() { static_cast<Derived*>(this)->StartUp(); }
 protected:
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    // ...
 private:
     GLFWwindow* window;
+    ImVec4 clear_color = ImVec4(0.1f, 0.1f, 0.1f, 1.00f);
 };
